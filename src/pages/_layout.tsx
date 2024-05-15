@@ -5,14 +5,15 @@ import { SWRConfig, mutate } from "swr";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useRoutes } from "react-router-dom";
-import { List, Paper, ThemeProvider } from "@mui/material";
+import { List, Paper, ThemeProvider, SvgIcon } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
 import { appWindow } from "@tauri-apps/api/window";
 import { routers } from "./_routers";
 import { getAxios } from "@/services/api";
 import { useVerge } from "@/hooks/use-verge";
 import LogoSvg from "@/assets/image/logo.svg?react";
-import LogoSvg_dark from "@/assets/image/logo_dark.svg?react";
+import iconLight from "@/assets/image/icon_light.svg?react";
+import iconDark from "@/assets/image/icon_dark.svg?react";
 import { atomThemeMode } from "@/services/states";
 import { useRecoilState } from "recoil";
 import { Notice } from "@/components/base";
@@ -72,7 +73,7 @@ const Layout = () => {
       const [status, msg] = payload as [string, string];
       switch (status) {
         case "set_config::ok":
-          Notice.success("Refresh clash config");
+          Notice.success(t("Clash Config Updated"));
           break;
         case "set_config::error":
           Notice.error(msg);
@@ -137,7 +138,26 @@ const Layout = () => {
         >
           <div className="layout__left">
             <div className="the-logo" data-tauri-drag-region="true">
-              {!isDark ? <LogoSvg /> : <LogoSvg_dark />}
+              <div
+                style={{
+                  height: "27px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <SvgIcon
+                  component={isDark ? iconDark : iconLight}
+                  style={{
+                    height: "36px",
+                    width: "36px",
+                    marginTop: "-3px",
+                    marginRight: "5px",
+                    marginLeft: "-3px",
+                  }}
+                  inheritViewBox
+                />
+                <LogoSvg fill={isDark ? "white" : "black"} />
+              </div>
               {<UpdateButton className="the-newbtn" />}
             </div>
 

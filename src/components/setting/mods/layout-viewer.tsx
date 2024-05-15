@@ -10,6 +10,7 @@ import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { copyIconFile, getAppDir } from "@/services/cmds";
 import { join } from "@tauri-apps/api/path";
 import { exists } from "@tauri-apps/api/fs";
+import getSystem from "@/utils/get-system";
 
 export const LayoutViewer = forwardRef<DialogRef>((props, ref) => {
   const { t } = useTranslation();
@@ -125,6 +126,25 @@ export const LayoutViewer = forwardRef<DialogRef>((props, ref) => {
               <MenuItem value="monochrome">{t("Monochrome")}</MenuItem>
               <MenuItem value="colorful">{t("Colorful")}</MenuItem>
               <MenuItem value="disable">{t("Disable")}</MenuItem>
+            </Select>
+          </GuardState>
+        </SettingItem>
+
+        <SettingItem label={t("Tray Icon")}>
+          <GuardState
+            value={
+              verge?.tray_icon ?? getSystem() === "macos"
+                ? "monochrome"
+                : "colorful"
+            }
+            onCatch={onError}
+            onFormat={(e: any) => e.target.value}
+            onChange={(e) => onChangeData({ tray_icon: e })}
+            onGuard={(e) => patchVerge({ tray_icon: e })}
+          >
+            <Select size="small" sx={{ width: 140, "> div": { py: "7.5px" } }}>
+              <MenuItem value="monochrome">{t("Monochrome")}</MenuItem>
+              <MenuItem value="colorful">{t("Colorful")}</MenuItem>
             </Select>
           </GuardState>
         </SettingItem>
